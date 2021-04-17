@@ -1,0 +1,28 @@
+JACOBI METHOD
+
+Norm of alpha:
+0.952381
+A priori estimation:
+176
+Number of Iteration:
+6
+x:
+1.00128 
+2.00054 
+2.99927 
+-1.99911 
+
+
+SEIDEL METHOD
+
+Norm of alpha:
+0.61905
+A priori estimation:
+13
+Number of Iteration:
+4
+x:
+1.00025 
+2.00013 
+3.00005 
+-2.00000 

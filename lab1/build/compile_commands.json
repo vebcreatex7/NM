@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/courage/sem6/NM/lab1/build",
+  "command": "/usr/bin/c++    -Wall -g   -std=gnu++2a -o CMakeFiles/lab1.dir/src/matrix.cpp.o -c /home/courage/sem6/NM/lab1/src/matrix.cpp",
+  "file": "/home/courage/sem6/NM/lab1/src/matrix.cpp"
+},
+{
+  "directory": "/home/courage/sem6/NM/lab1/build",
+  "command": "/usr/bin/c++    -Wall -g   -std=gnu++2a -o CMakeFiles/lab1.dir/src/main.cpp.o -c /home/courage/sem6/NM/lab1/src/main.cpp",
+  "file": "/home/courage/sem6/NM/lab1/src/main.cpp"
+},
+{
+  "directory": "/home/courage/sem6/NM/lab1/build",
+  "command": "/usr/bin/c++    -Wall -g   -std=gnu++2a -o CMakeFiles/lab1.dir/src/calculation.cpp.o -c /home/courage/sem6/NM/lab1/src/calculation.cpp",
+  "file": "/home/courage/sem6/NM/lab1/src/calculation.cpp"
+}
+]
