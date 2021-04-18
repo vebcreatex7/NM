@@ -31,3 +31,4 @@ A * x - labda * x:
 0.00008 
 
 
+Number of iterations: 5

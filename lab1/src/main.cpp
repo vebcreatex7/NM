@@ -139,7 +139,8 @@ void Task4() {
                 << "x_" << i + 1 << ":\n" << Eigenvectors[i]
                 << "A * x - labda * x: \n" << A * Eigenvectors[i] - Eigenvectors[i] * Eigenvalues[i] << "\n\n";
     }
-    
+    myFile << "Number of iterations: " << count << '\n';
+    myFile.close();
 }
 
 
