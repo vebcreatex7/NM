@@ -30,7 +30,9 @@ public:
     TMatrix operator + (TMatrix const &) const;
     TMatrix operator - (TMatrix const &) const;
     TMatrix operator * (TMatrix const &) const;
+    TMatrix operator *= (TMatrix const &);
     TMatrix operator * (int) const;
+    TMatrix operator * (long double) const;
     TMatrix& operator = (TMatrix const &);
     bool operator == (TMatrix const&) const;
     friend std::ostream& operator << (std::ostream&, TMatrix const& );
@@ -38,6 +40,7 @@ public:
     std::tuple<TMatrix, TMatrix, std::vector<std::pair<size_t, size_t>>> LUdecomposition() const;
     long double Determinant() const;
     TMatrix Inverse() const;
+    TMatrix Transpose() const;
     size_t Size() const;
     size_t Get_Rows() const;
     size_t Get_Cols() const;

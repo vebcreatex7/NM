@@ -75,7 +75,7 @@ void Task3() {
     myFile.close();
 
     std::fstream log;
-    log.open("../ans/log3.1.txt", std::ios::out);
+    log.open("../logs/log3.1.txt", std::ios::out);
     auto ans = Iterative_Jacobi_Method(A, b, eps, log);
     log.close();
 
@@ -94,7 +94,7 @@ void Task3() {
     
 
 
-    log.open("../ans/log3.2.txt", std::ios::out);
+    log.open("../logs/log3.2.txt", std::ios::out);
     ans = Seidel_Method(A, b, eps, log);
     log.close();
 
@@ -114,13 +114,42 @@ void Task3() {
 }
 
 
+void Task4() {
+    std::fstream myFile;
+    myFile.open("../tasks/t4.txt", std::ios::in);
+    size_t n;
+    long double eps;
+    myFile >> n >> eps;
+    TMatrix A(n);
+    myFile >> A;
+    myFile.close();
+
+    std::fstream log;
+    log.open("../logs/log4.txt", std::ios::out);
+    auto ans = Rotation_Method(A, eps, log);
+    log.close();
+
+    
+    myFile.open("../ans/a4.txt", std::ios::out);
+    std::vector<long double> Eigenvalues = std::get<0>(ans);
+    std::vector<TMatrix> Eigenvectors = std::get<1>(ans);
+    size_t count = std::get<2>(ans);
+    for (size_t i = 0; i != n; i++) {
+        myFile << "Eigenvalue_" << i + 1 << " = " << Eigenvalues[i] << '\n'
+                << "x_" << i + 1 << ":\n" << Eigenvectors[i]
+                << "A * x - labda * x: \n" << A * Eigenvectors[i] - Eigenvectors[i] * Eigenvalues[i] << "\n\n";
+    }
+    
+}
+
 
 
 int main() {
     
     //Task1();
     //Task2();
-    Task3();
+    //Task3();
+    Task4();
     return 0;
 
 }

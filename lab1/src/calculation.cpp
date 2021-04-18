@@ -1,24 +1,7 @@
 #include "calculation.hpp"
 #include <vector>
 #include <algorithm>
-
-
-/*int Diagonals_Without_Zeros(TMatrix& A, TMatrix& b) {
-    int p = 0;
-    size_t n = A.Size();
-    for (size_t i = 0; i != n; i++) {
-        if (A[i][i] == 0) {
-            for (size_t j = i + 1; j < n; j++) {
-                if (A[j][i] != 0) {
-                    A.Swap_Rows(i, j);
-                    b.Swap_Rows(i, j);
-                    p++;
-                }
-            }
-        }
-    }
-    return p;
-}*/
+#include <limits>
 
 //Task1
 TMatrix LU_Solving_System(TMatrix const& L, TMatrix const& U, TMatrix b, std::vector<std::pair<size_t, size_t>> const& p) {
@@ -147,9 +130,7 @@ std::tuple<TMatrix, int, int, long double> Iterative_Jacobi_Method(TMatrix const
     //A priori estimation of the number of iterations
     int k = (int)ceil(((log10(eps) - log10(beta.Norm()) + log10(1 - norm)) / log10(norm)) - 1);
 
-
     //Iterations
-
     TMatrix x_prev = beta;
     TMatrix x;
     int count = 0;
@@ -218,7 +199,6 @@ std::tuple<TMatrix, int, int, long double> Seidel_Method(TMatrix const& A, TMatr
 
 
     //Iterations
-
     TMatrix x_prev = beta;
     TMatrix x;
     int count = 0;
@@ -238,4 +218,100 @@ std::tuple<TMatrix, int, int, long double> Seidel_Method(TMatrix const& A, TMatr
 
     return std::make_tuple(x, count, k, norm);
 
+}
+
+
+
+
+//Task4
+
+long double t(TMatrix  const& A) {
+    size_t n = A.Size();
+    long double sum = .0;
+    for (size_t i = 0; i != n; i++) {
+        for (size_t j = 0; j != i; j++) {
+            sum += std::pow(A[i][j], 2);
+        }
+    }
+    return std::sqrt(sum);
+}
+
+std::tuple<std::vector<long double>, std::vector<TMatrix>, size_t> Rotation_Method(TMatrix const& M, long double const eps, std::ostream& log) {
+    size_t n = M.Size();
+    TMatrix A = M;
+    TMatrix E(n);
+    for (size_t i = 0; i != n; i++)
+        E[i][i] = 1.;
+    TMatrix U_Composition = E;
+
+    //Iterations
+    size_t count = 0;
+    while (true) {
+        //find the maximum non-diagonal
+        long double max = -1e-10;
+        size_t i_max = -1;
+        size_t j_max = -1;
+        for (size_t i = 0; i != n; i++) {
+            for (size_t j = 0; j != i; j ++) {
+                if (std::abs(A[i][j]) > std::abs(max)) {
+                    max = A[i][j];
+                    i_max = i;
+                    j_max = j;
+                }
+            }
+        }
+
+        //Rotation angle
+        long double phi = .0;
+        if (std::abs(A[i_max][i_max] - A[j_max][j_max]) < delta)
+            phi = M_PI_4;
+        else
+            phi = atan(2 * A[i_max][j_max] / (A[j_max][j_max] - A[i_max][i_max])) / 2;
+        
+
+        //Building matrix U
+        TMatrix U = E;
+        U[i_max][i_max] = cos(phi);
+        U[j_max][j_max] = cos(phi);
+        U[i_max][j_max] = sin(phi);
+        U[j_max][i_max] = -sin(phi);
+
+        U_Composition = U_Composition * U;
+        
+
+        //Iterate
+        A = U.Transpose() * A * U;
+        long double accurate = t(A);
+        log << "max|a| = " << max << '\n'
+            << "phi = " << phi << '\n'
+            << "U_" << count << ":\n" << U
+            << "A_" << count + 1 << ":\n" << A
+            << "t = " << accurate << "\n\n";
+        
+        count++;
+
+        if (accurate < eps)
+            break;  
+    }
+
+
+
+    //Restor Eigenvalues and eigenvectors
+
+    std::vector<long double> Eigenvalues(n);
+    for (size_t i = 0; i != n; i++)
+        Eigenvalues[i] = A[i][i];
+
+    std::vector<TMatrix> Eigenvectors(n);
+    for (size_t j = 0; j != n; j++) {
+        TMatrix tmp(n, size_t(1));
+        for (size_t i = 0; i != n; i++)
+            tmp[i][0] = U_Composition[i][j];
+        Eigenvectors[j] = tmp;
+    }
+
+    return std::make_tuple(Eigenvalues, Eigenvectors, count);
+
+    
+    
 }

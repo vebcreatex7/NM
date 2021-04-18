@@ -15,5 +15,8 @@ TMatrix Tridiagonal_Algorithm(TMatrix const& A, TMatrix const& D);
 //Task3
 
 std::tuple<TMatrix, int, int, long double> Iterative_Jacobi_Method(TMatrix const& A, TMatrix const& b, long double eps, std::ostream& log);
-
 std::tuple<TMatrix, int, int, long double> Seidel_Method(TMatrix const& A, TMatrix const& b, long double const eps, std::ostream& log);
+
+//Task4
+
+std::tuple<std::vector<long double>, std::vector<TMatrix>, size_t> Rotation_Method(TMatrix const& M, long double const eps, std::ostream& log);

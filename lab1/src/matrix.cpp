@@ -90,12 +90,25 @@ TMatrix TMatrix::operator* (TMatrix const & other) const{
     return res;
 }
 
+TMatrix TMatrix::operator *= (TMatrix const & other) {
+    return (*this * other);
+}
+
 
 TMatrix TMatrix::operator* (int c) const {
     TMatrix res = *this;
     for (size_t i = 0; i != rows_; i++) {
-        for (size_t j = 0; i != cols_; j++)
+        for (size_t j = 0; j != cols_; j++)
             res.data_[i][j] *= c;
+    }
+    return res;
+}
+
+TMatrix TMatrix::operator * (long double d) const {
+    TMatrix res = *this;
+    for (size_t i = 0; i != rows_; i++) {
+        for (size_t j = 0; j != cols_; j++)
+            res.data_[i][j] *= d;
     }
     return res;
 }
@@ -201,6 +214,18 @@ long double TMatrix::Determinant() const {
 TMatrix TMatrix::Inverse() const {
     auto [L, U, P] = this->LUdecomposition();
     return LU_Inverse_Matrix(L, U, P);
+}
+
+TMatrix TMatrix::Transpose() const {
+    size_t n = Get_Rows();
+    size_t m = Get_Cols();
+    TMatrix t(m ,n);
+    for (size_t i = 0; i != rows_; i++) {
+        for (size_t j = 0; j != cols_; j++) {
+            t[j][i] = data_[i][j];
+        }
+    }
+    return t;
 }
 
 size_t TMatrix::Size() const {
