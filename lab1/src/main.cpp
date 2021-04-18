@@ -68,10 +68,11 @@ void Task3() {
     myFile.open("../tasks/t3.txt", std::ios::in);
     size_t n;
     long double eps;
-    myFile >> eps >> n;
+    myFile  >> n;
     TMatrix A(n);
     TMatrix b(n, (size_t)1);
     myFile >> A >> b;
+    myFile >> eps;
     myFile.close();
 
     std::fstream log;
@@ -119,9 +120,10 @@ void Task4() {
     myFile.open("../tasks/t4.txt", std::ios::in);
     size_t n;
     long double eps;
-    myFile >> n >> eps;
+    myFile >> n;
     TMatrix A(n);
     myFile >> A;
+    myFile  >> eps;
     myFile.close();
 
     std::fstream log;
@@ -147,9 +149,9 @@ void Task4() {
 
 int main() {
     
-    //Task1();
-    //Task2();
-    //Task3();
+    Task1();
+    Task2();
+    Task3();
     Task4();
     return 0;
 
