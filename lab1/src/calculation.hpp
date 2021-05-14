@@ -9,6 +9,7 @@ TMatrix LU_Solving_System(TMatrix const& L, TMatrix const& U, TMatrix b, std::ve
 long double LU_Determinant(TMatrix const& U, std::vector<std::pair<size_t, size_t>> const&);
 TMatrix LU_Inverse_Matrix(TMatrix const& L, TMatrix const& U, std::vector<std::pair<size_t, size_t>> const& p);
 
+
 //Task2
 TMatrix Tridiagonal_Algorithm(TMatrix const& A, TMatrix const& D);
 

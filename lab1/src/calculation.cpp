@@ -216,6 +216,7 @@ std::tuple<TMatrix, int, int, long double> Seidel_Method(TMatrix const& A, TMatr
     int k = (int)ceil(((log10(eps) - log10(beta.Norm()) + log10(1 - norm)) / log10(norm)) - 1);
 
 
+
     //Iterations
     TMatrix x_prev = beta;
     TMatrix x;

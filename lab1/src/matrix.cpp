@@ -182,6 +182,7 @@ std::tuple<TMatrix, TMatrix, std::vector<std::pair<size_t, size_t>>> TMatrix::LU
     std::vector<std::pair<size_t, size_t>> P;
     
     
+    
     for (size_t i = 0; i != n - 1; i++) {
         auto p = U.Change_With_Max(i);
         if (p.first != p.second)
