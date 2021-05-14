@@ -5,12 +5,12 @@ Norm of alpha:
 A priori estimation:
 176
 Number of Iteration:
-6
+8
 x:
-1.00128 
-2.00054 
-2.99927 
--1.99911 
+1.00009 
+2.00004 
+2.99995 
+-1.99994 
 
 
 SEIDEL METHOD

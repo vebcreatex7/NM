@@ -112,6 +112,10 @@ std::tuple<TMatrix, int, int, long double> Iterative_Jacobi_Method(TMatrix const
     size_t n = A.Size();
     TMatrix alpha = A;
     TMatrix beta = b;
+
+    auto [L, U, P] = A.LUdecomposition();
+    TMatrix Exact_Solution = LU_Solving_System(L, U, b, P);
+
     for (size_t i = 0; i != n; i++) {
         if(alpha[i][i] == 0) {
             auto t = alpha.Change_Without_Zero(i);
@@ -128,6 +132,7 @@ std::tuple<TMatrix, int, int, long double> Iterative_Jacobi_Method(TMatrix const
 
         }
     }
+
     //Norm
     long double norm = alpha.Norm();
 
@@ -142,13 +147,22 @@ std::tuple<TMatrix, int, int, long double> Iterative_Jacobi_Method(TMatrix const
     while (true) {
         count++;
         x = beta + alpha * x_prev;
-        long double eps_i = TMatrix(x - x_prev).Norm();
+
+
+        long double eps_k;
+        if (norm < 1.) {
+            eps_k = (norm / (1 - norm)) * TMatrix(x - x_prev).Norm();
+        } else {
+            eps_k = TMatrix(x - x_prev).Norm();
+        }
 
         log << "x_" << count << '\n' <<  x_prev 
-        << "eps_" << count << " = " << eps_i << "\n\n";
+        << "eps_" << count << " = " << eps_k << "\n\n";
 
-        if (eps_i <= eps)
+
+        if (eps_k <= eps)
             break;
+        
         x_prev = x;
     }
     
@@ -210,12 +224,20 @@ std::tuple<TMatrix, int, int, long double> Seidel_Method(TMatrix const& A, TMatr
     while (true) {
         count++;
         x = beta + alpha * x_prev;
-        long double eps_i = TMatrix(x - x_prev).Norm();
+
+        long double eps_k;
+        if (norm < 1.) {
+            eps_k = (C.Norm() / (1 - norm)) * TMatrix(x - x_prev).Norm();
+        } else {
+            eps_k = TMatrix(x - x_prev).Norm();
+        }
 
         log << "x_" << count << '\n' <<  x_prev 
-        << "eps_" << count << " = " << eps_i << "\n\n";
+        << "eps_" << count << " = " << eps_k << "\n\n";
 
-        if (eps_i <= eps)
+
+
+        if (eps_k <= eps)
             break;
         x_prev = x;
     }

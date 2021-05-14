@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/home/courage/sem6/NM/lab1/src/calculation.cpp
+calculation.hpp
+/home/courage/sem6/NM/lab1/src/calculation.hpp
+vector
+-
+algorithm
+-
+limits
+-
+
 /home/courage/sem6/NM/lab1/src/calculation.hpp
 matrix.hpp
 /home/courage/sem6/NM/lab1/src/matrix.hpp
@@ -13,12 +23,6 @@ tuple
 -
 iomanip
 -
-
-/home/courage/sem6/NM/lab1/src/main.cpp
-matrix.hpp
-/home/courage/sem6/NM/lab1/src/matrix.hpp
-calculation.hpp
-/home/courage/sem6/NM/lab1/src/calculation.hpp
 
 /home/courage/sem6/NM/lab1/src/matrix.hpp
 iostream
