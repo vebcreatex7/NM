@@ -6,7 +6,7 @@ int Diagonals_Without_Zeros(TMatrix& A, TMatrix& b);
 
 //Task1
 TMatrix LU_Solving_System(TMatrix const& L, TMatrix const& U, TMatrix b, std::vector<std::pair<size_t, size_t>> const& p);
-long double LU_Determinant(TMatrix const& U, int p);
+long double LU_Determinant(TMatrix const& U, std::vector<std::pair<size_t, size_t>> const&);
 TMatrix LU_Inverse_Matrix(TMatrix const& L, TMatrix const& U, std::vector<std::pair<size_t, size_t>> const& p);
 
 //Task2

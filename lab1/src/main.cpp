@@ -18,14 +18,19 @@ void Task1() {
     TMatrix L = std::get<0>(LU);
     TMatrix U = std::get<1>(LU);
     std::vector<std::pair<size_t, size_t>> P = std::get<2>(LU);
+    TMatrix Origin = L * U;
+    for (auto a : P) {
+        if (a.first != a.second)
+            Origin.Swap_Rows(a.first, a.second);
+    }
     TMatrix x = LU_Solving_System(L, U, b, P);
-    double det = LU_Determinant(U, P.size());
+    double det = LU_Determinant(U, P);
     TMatrix Inverse = LU_Inverse_Matrix(L, U, P);
 
     myFile.open("../ans/a1.txt", std::ios::out);
     myFile << "L:\n" << L
             << "\nU:\n" << U
-            << "\nL*U:\n" << L * U
+            << "\nL*U:\n" << Origin
             << "\nx:\n" << x
             << "\n Det(A) = " << det
             << "\n\n A^(-1):\n" << Inverse
@@ -145,6 +150,18 @@ void Task4() {
     myFile.close();
 }
 
+void Test() {
+    size_t n;
+    std::cin >> n;
+    TMatrix t(n);
+    std::cin >> t;
+
+    auto [L, U, P] = t.LUdecomposition();
+    std::cout << L * U;
+    for (auto a : P)
+        std::cout << a.first << ' ' << a.second << '\n';
+}
+
 
 
 int main() {
@@ -153,6 +170,7 @@ int main() {
     Task2();
     Task3();
     Task4();
+    //Test();
     return 0;
 
 }

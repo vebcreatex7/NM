@@ -35,7 +35,11 @@ TMatrix LU_Solving_System(TMatrix const& L, TMatrix const& U, TMatrix b, std::ve
 }
 
 
-long double LU_Determinant(TMatrix const& U, int p) {
+long double LU_Determinant(TMatrix const& U, std::vector<std::pair<size_t, size_t>> const & P) {
+    size_t p = 0;
+    for (auto a : P)
+        p = a.first != a.second ? p + 1 : p;
+
     long double det = 1.;
     for (size_t i = 0; i != U.Size(); i++)
         det *= U[i][i];

@@ -180,14 +180,13 @@ std::tuple<TMatrix, TMatrix, std::vector<std::pair<size_t, size_t>>> TMatrix::LU
     TMatrix U = *this;
     TMatrix L(n);
     std::vector<std::pair<size_t, size_t>> P;
-    for (size_t i = 0; i != n; i++)
-        L.data_[i][i] = 1;
+    
     
     for (size_t i = 0; i != n - 1; i++) {
-        if (U.data_[i][i] == 0) {
-            auto p = U.Change_Without_Zero(i);
-            P.push_back(p);
-        }
+        auto p = U.Change_With_Max(i);
+        if (p.first != p.second)
+            L.Swap_Rows(p.first, p.second);
+        P.push_back(p);
         for (size_t j = i + 1; j != n; j++) {
             long double t = U.data_[j][i] / U.data_[i][i];
             for (size_t k = i; k != n; k++) {
@@ -197,17 +196,24 @@ std::tuple<TMatrix, TMatrix, std::vector<std::pair<size_t, size_t>>> TMatrix::LU
         }
     }
 
+    for (size_t i = 0; i != n; i++)
+        L.data_[i][i] = 1;
+
     return  std::make_tuple(L, U, P);
 }
 
+TMatrix TMatrix::Test() const {
+    TMatrix U = *this;
+    for (size_t i = 0; i != rows_- 1; i++) {
+        U.Change_With_Max(i);
+        std::cout << U << "\n";
+    }
+    return U;
+}
+
 long double TMatrix::Determinant() const {
-    auto t = this->LUdecomposition();
-    TMatrix U = std::get<1>(t);
-    int p = std::get<2>(t).size();
-    long double det = 1;
-    for (size_t i = 0; i != cols_; i++)
-        det *= U.data_[i][i];
-    return std::pow(-1, p) * det;
+    auto [L, U, P] = this->LUdecomposition();
+    return LU_Determinant(U, P);
 }
 
 
@@ -257,13 +263,30 @@ long double  TMatrix::Norm() const {
 
 std::pair<size_t, size_t> TMatrix::Change_Without_Zero(size_t i) {
     size_t j = 0;
-    for (size_t j = i + 1; j < Size(); j++)
+    for (size_t j = i + 1; j < Size(); j++) {
         if (data_[j][i] != 0.) {
             Swap_Rows(i ,j);
             break;
         }
+    }
     return std::make_pair(i, j);    
 }
+
+
+std::pair<size_t, size_t> TMatrix::Change_With_Max(size_t i) {
+    size_t pos_max = i;
+    long double max = data_[i][i];
+    for (size_t j = i + 1; j < Size(); j++)  {
+        if (std::abs(data_[j][i]) > std::abs(max)) {
+            max = data_[j][i];
+            pos_max = j;
+        }
+    }
+    Swap_Rows(i, pos_max);
+    return std::make_pair(i, pos_max);
+}
+
+
 
 void TMatrix::Swap_Rows(size_t i, size_t j) {
     long double * tmp = new long double [cols_];

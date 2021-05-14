@@ -38,6 +38,7 @@ public:
     friend std::ostream& operator << (std::ostream&, TMatrix const& );
     friend std::istream& operator >> (std::istream&, TMatrix&);
     std::tuple<TMatrix, TMatrix, std::vector<std::pair<size_t, size_t>>> LUdecomposition() const;
+    TMatrix Test() const;
     long double Determinant() const;
     TMatrix Inverse() const;
     TMatrix Transpose() const;
@@ -46,6 +47,7 @@ public:
     size_t Get_Cols() const;
     long double Norm() const;
     std::pair<size_t, size_t> Change_Without_Zero(size_t i);
+    std::pair<size_t, size_t> Change_With_Max(size_t i);
     void Swap_Rows(size_t i, size_t j);
     
 
