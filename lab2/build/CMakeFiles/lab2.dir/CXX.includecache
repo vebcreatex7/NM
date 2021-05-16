@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/courage/sem6/NM/lab2/src/calculation.cpp
+calculation.hpp
+/home/courage/sem6/NM/lab2/src/calculation.hpp
+
+/home/courage/sem6/NM/lab2/src/calculation.hpp
+cmath
+-
+fstream
+-
+iostream
+-
+tuple
+-
+iomanip
+-
+
+/home/courage/sem6/NM/lab2/src/main.cpp
+calculation.hpp
+/home/courage/sem6/NM/lab2/src/calculation.hpp
+

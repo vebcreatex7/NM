@@ -1,0 +1,7 @@
+Newton Method:
+x = 0.0914901
+Number of iterations: 5
+
+Simple Iterations Method:
+x = 0.0914901
+Number of iterations: 8
