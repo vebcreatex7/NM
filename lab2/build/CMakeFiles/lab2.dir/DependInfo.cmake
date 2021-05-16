@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/courage/sem6/NM/lab2/src/calculation.cpp" "/home/courage/sem6/NM/lab2/build/CMakeFiles/lab2.dir/src/calculation.cpp.o"
   "/home/courage/sem6/NM/lab2/src/main.cpp" "/home/courage/sem6/NM/lab2/build/CMakeFiles/lab2.dir/src/main.cpp.o"
+  "/home/courage/sem6/NM/lab2/src/matrix.cpp" "/home/courage/sem6/NM/lab2/build/CMakeFiles/lab2.dir/src/matrix.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

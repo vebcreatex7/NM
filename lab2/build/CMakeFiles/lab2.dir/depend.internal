@@ -4,6 +4,12 @@
 CMakeFiles/lab2.dir/src/calculation.cpp.o
  /home/courage/sem6/NM/lab2/src/calculation.cpp
  /home/courage/sem6/NM/lab2/src/calculation.hpp
+ /home/courage/sem6/NM/lab2/src/matrix.hpp
 CMakeFiles/lab2.dir/src/main.cpp.o
  /home/courage/sem6/NM/lab2/src/calculation.hpp
  /home/courage/sem6/NM/lab2/src/main.cpp
+ /home/courage/sem6/NM/lab2/src/matrix.hpp
+CMakeFiles/lab2.dir/src/matrix.cpp.o
+ /home/courage/sem6/NM/lab2/src/calculation.hpp
+ /home/courage/sem6/NM/lab2/src/matrix.cpp
+ /home/courage/sem6/NM/lab2/src/matrix.hpp

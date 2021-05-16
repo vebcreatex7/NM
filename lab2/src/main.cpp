@@ -1,4 +1,5 @@
 #include "calculation.hpp"
+#include "matrix.hpp"
 
 
 
@@ -28,10 +29,22 @@ void Task1() {
 }
 
 void Task2() {
+    long double eps;
+    std::fstream myFile("../tests/t2.txt", std::ios::in);
+
+    myFile >> eps;
+    myFile.close();
+
+    std::fstream log("../logs/log2.1.txt", std::ios::out);
+    auto [x, count] = Dimentional_Newton_Method(eps, log);
+    log.close();
+
+    myFile.open("../ans/a2.txt");
+    myFile << "Newton Method:\n" << "x:\n" << x << "\nNumber of iterations: " << count << "\n\n";
 
 }
 int main() {
-    Task1();
+    //Task1();
     Task2();
 
     return 0;

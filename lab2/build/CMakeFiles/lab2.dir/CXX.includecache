@@ -9,6 +9,8 @@
 /home/courage/sem6/NM/lab2/src/calculation.cpp
 calculation.hpp
 /home/courage/sem6/NM/lab2/src/calculation.hpp
+matrix.hpp
+/home/courage/sem6/NM/lab2/src/matrix.hpp
 
 /home/courage/sem6/NM/lab2/src/calculation.hpp
 cmath
@@ -21,8 +23,24 @@ tuple
 -
 iomanip
 -
+matrix.hpp
+/home/courage/sem6/NM/lab2/src/matrix.hpp
 
-/home/courage/sem6/NM/lab2/src/main.cpp
-calculation.hpp
-/home/courage/sem6/NM/lab2/src/calculation.hpp
+/home/courage/sem6/NM/lab2/src/matrix.hpp
+iostream
+-
+cstddef
+-
+cassert
+-
+algorithm
+-
+fstream
+-
+iomanip
+-
+cmath
+-
+complex
+-
 

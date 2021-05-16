@@ -1,0 +1,7 @@
+Newton Method:
+x:
+5.92926 
+1.25107 
+
+Number of iterations: 3
+

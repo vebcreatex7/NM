@@ -4,15 +4,28 @@
 #include <tuple>
 #include <iomanip>
 
+#include "matrix.hpp"
+
+
+TMatrix LU_Solving_System(TMatrix const& L, TMatrix const& U, TMatrix b, std::vector<std::pair<size_t, size_t>> const& p);
+long double LU_Determinant(TMatrix const& U, std::vector<std::pair<size_t, size_t>> const&);
+TMatrix LU_Inverse_Matrix(TMatrix const& L, TMatrix const& U, std::vector<std::pair<size_t, size_t>> const& p);
+TMatrix Seidel_Method(TMatrix const& A, TMatrix const& b, long double const eps);
+int Sign(long double d);
+
 
 
 //Task1
 
-long double f(long double x);
-long double First_Derivative(long double x);
-long double Second_Derivative(long double x);
+
 std::tuple<long double, int> Newton_Method(long double a, long double b, long double eps, std::ostream& log);
 
-long double phi(long double x);
-long double First_Derivative_Phi(long double x);
+
 std::tuple<long double, int> Simple_Iterations_Method(long double a, long double b, long double eps, std::ostream& log);
+
+
+//Task2
+
+std::tuple<TMatrix, int> Dimentional_Newton_Method(long double eps, std::ostream& log);
+
+
