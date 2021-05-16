@@ -342,3 +342,74 @@ std::tuple<std::vector<long double>, std::vector<TMatrix>, size_t> Rotation_Meth
     
     
 }
+
+
+//Task 5
+
+int Sign(long double d) {
+    return d < 0 ? -1 : 1;
+}
+
+
+std::vector<std::complex<long double>> Solve_Quadratic_Equation(TMatrix const& A, size_t col) {
+    std::vector<std::complex<long double>> v;
+    long double b = -A[col][col] - A[col + 1][col + 1];
+    long double c = A[col][col] * A[col + 1][col + 1] - (A[col][col + 1] * A[col + 1][col]);
+    long double d = std::pow(b, 2.) - 4 * c;
+    if (d > 0) {
+        v.push_back(std::complex<long double>{(-b - std::sqrt(d)) / 2., 0});
+        v.push_back(std::complex<long double>{(-b + std::sqrt(d)) / 2., 0});
+    } else if (d == 0) {
+        v.push_back(std::complex<long double>{-b / 2., 0});
+        v.push_back(std::complex<long double>{-b / 2., 0});
+    } else {
+         v.push_back(std::complex<long double>{-b / 2., -sqrt(-d) / 2.});
+         v.push_back(std::complex<long double>{-b / 2., sqrt(-d) / 2.});
+    }
+    return v;
+}
+
+std::tuple<std::vector<std::complex<long double>>, int> Eigenvalues_Using_QR(TMatrix const& A, long double eps, std::ostream& log) {
+    std::vector<std::array<std::complex<long double>, 2>> Eigens(A.Get_Rows());
+    TMatrix A_k = A;
+    bool stop;
+    size_t count = 0;
+    while (1) {
+        stop = true;
+        for (size_t i = 0; i != A.Get_Rows(); i++) {
+            if (A_k.GetSquaredColumnSum(i + 1, i) < eps) {
+                stop = stop and (std::abs(std::abs(Eigens[i][0]) - A_k[i][i]) < eps);
+                Eigens[i][0] = A_k[i][i];
+                Eigens[i][1] = {};
+            } else if (A_k.GetSquaredColumnSum(i + 2, i) < eps) {
+                auto Roots = Solve_Quadratic_Equation(A_k, i);
+                stop = stop and (std::abs(std::abs(Eigens[i][0]) - std::abs(Roots[0]))) < eps;
+                Eigens[i][0] = Roots[0];
+                Eigens[i][1] = Roots[1];
+                i++;
+            } else {
+                stop = false;
+            }
+        }
+        if (stop)
+            break;
+
+        auto [Q, R] = A_k.QRdecomposition();
+        A_k = R * Q;
+        count++;
+        log << "Q_" << count - 1 << ":\n" << Q << "\n"
+            << "R_" << count - 1 << ":\n" << R << "\n"
+            << "A_" << count << ":\n" << A_k << "\n";
+    }
+    std::vector<std::complex<long double>> result;
+    for (size_t i = 0; i < Eigens.size(); i++) {
+        if (std::abs(Eigens[i][1]) < eps) {
+            result.push_back(Eigens[i][0]);
+        } else {
+            result.push_back(Eigens[i][0]);
+            result.push_back(Eigens[i][1]);
+            i++;
+        }
+    }
+    return std::make_tuple(result, count);
+}

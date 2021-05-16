@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iomanip>
 #include <cmath>
+#include <complex>
 
 
 long double const delta = 1e-9;
@@ -38,7 +39,7 @@ public:
     friend std::ostream& operator << (std::ostream&, TMatrix const& );
     friend std::istream& operator >> (std::istream&, TMatrix&);
     std::tuple<TMatrix, TMatrix, std::vector<std::pair<size_t, size_t>>> LUdecomposition() const;
-    TMatrix Test() const;
+    std::tuple<TMatrix, TMatrix> QRdecomposition() const;
     long double Determinant() const;
     TMatrix Inverse() const;
     TMatrix Transpose() const;
@@ -46,9 +47,12 @@ public:
     size_t Get_Rows() const;
     size_t Get_Cols() const;
     long double Norm() const;
+    long double Norm_2() const;
+    long double GetSquaredColumnSum(size_t row, size_t col) const;
     std::pair<size_t, size_t> Change_Without_Zero(size_t i);
     std::pair<size_t, size_t> Change_With_Max(size_t i);
     void Swap_Rows(size_t i, size_t j);
+
     
 
 

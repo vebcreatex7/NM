@@ -150,27 +150,47 @@ void Task4() {
     myFile.close();
 }
 
-void Test() {
+
+void Task5() {
+    std::fstream myFile;
+    myFile.open("../tasks/t5.txt", std::ios::in);
     size_t n;
-    std::cin >> n;
-    TMatrix t(n);
-    std::cin >> t;
+    myFile >> n;
+    TMatrix A(n);
+    myFile >> A;
+    long double eps = 0.;
+    myFile >> eps;
+    myFile.close();
 
-    auto [L, U, P] = t.LUdecomposition();
-    std::cout << L * U;
-    for (auto a : P)
-        std::cout << a.first << ' ' << a.second << '\n';
+    std::fstream log;
+    log.open("../logs/log5.txt", std::ios::out);
+    auto [res, count] = Eigenvalues_Using_QR(A, eps, log);
+    log.close();
+
+    myFile.open("../ans/a5.txt", std::ios::out);
+    for (size_t i = 0; i != res.size(); i++) {
+        myFile << "lambda_" << i + 1 << " = ";
+        if (res[i].imag() == 0)
+            myFile << res[i].real() << '\n';
+        else if (res[i].real() == 0)
+            myFile << res[i].imag() << "i\n";
+        else 
+            myFile << res[i].real() << " + " << res[i].imag() << "i\n";
+    }
+        
+    
+    myFile << "\nQR Algorithm took " << count << " iterations\n";
+    myFile.close();
 }
-
 
 
 int main() {
     
-   // Task1();
-   // Task2();
+    Task1();
+    Task2();
     Task3();
-   // Task4();
-    //Test();
+    Task4();
+    Task5();
     return 0;
 
 }
