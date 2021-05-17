@@ -5,3 +5,10 @@ x:
 
 Number of iterations: 3
 
+Simple Iterations Method:
+x:
+5.92799 
+1.25221 
+
+Number of iterations: 4
+

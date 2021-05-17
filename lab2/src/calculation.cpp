@@ -65,87 +65,13 @@ int Sign(long double d) {
 }
 
 
-//Seidel
-TMatrix Seidel_Method(TMatrix const& A, TMatrix const& b, long double const eps) {
-    size_t n = A.Size();
-    TMatrix alpha = A;
-    TMatrix beta = b;
-    for (size_t i = 0; i != n; i++) {
-        if(alpha[i][i] == 0) {
-            auto t = alpha.Change_Without_Zero(i);
-            beta.Swap_Rows(t.first, t.second);
-        }
-        long double tmp = alpha[i][i];
-        beta[i][0] /= tmp;
-        for (size_t j = 0; j != n; j++) {
-            
-            if (j == i)
-                alpha[i][i] = 0;
-            else
-                alpha[i][j] /= -tmp;
-
-        }
-    }
-
-    TMatrix B(n), C(n);
-    for (size_t i = 0; i != n ; i++) {
-        for (size_t j = 0; j != n; j++) {
-            if (i > j)
-                B[i][j] = alpha[i][j];
-            else {
-                C[i][j] = alpha[i][j];
-            }
-        }
-    }
-    TMatrix E(n);
-    for (size_t i = 0; i != n; i++)
-        E[i][i] = 1;
-
-    alpha = (E - B).Inverse() * C;
-    beta = (E - B).Inverse() * beta;
-
-    
-    //Norm
-    long double norm = alpha.Norm();
-
-    //A priori estimation of the number of iterations
-    int k = (int)ceil(((log10(eps) - log10(beta.Norm()) + log10(1 - norm)) / log10(norm)) - 1);
-
-
-
-    //Iterations
-    TMatrix x_prev = beta;
-    TMatrix x;
-    int count = 0;
-    while (true) {
-        count++;
-        x = beta + alpha * x_prev;
-
-        long double eps_k;
-        if (norm < 1.) {
-            eps_k = (C.Norm() / (1 - norm)) * TMatrix(x - x_prev).Norm();
-        } else {
-            eps_k = TMatrix(x - x_prev).Norm();
-        }
-
-
-
-        if (eps_k <= eps)
-            break;
-        x_prev = x;
-    }
-
-    return x;
-
-}
-
-
-
 
 
 
 
 //Task1
+
+//Newton
 long double f(long double x) {
     return sqrt(1 - std::pow(x, 2.)) - exp(x) + 0.1;
 }
@@ -161,22 +87,27 @@ long double Second_Derivative(long double x) {
 */
 
 
+
 std::tuple<long double, int> Newton_Method(long double a, long double b, long double eps, std::ostream& log) {
-    long double x_prev = b;
-    long double x;
+    long double x_prev;
+    long double x = b;
     int count = 0;
     do {
+        x_prev = x;
         count++;
         x = x_prev - f(x_prev) / First_Derivative(x_prev);
         log << std::setprecision(7) << std::fixed  << x << ' ' << f(x) << ' ' << First_Derivative(x) << ' ' << - f(x) / First_Derivative(x) << '\n';
 
-    } while(std::abs(x - x_prev) >= eps && (x_prev = x));
+    } while(std::abs(x - x_prev) >= eps);
 
     return std::make_tuple(x, count);
 
 }
 
 
+
+
+//Iterations
 long double phi(long double x) {
     return log(0.1 + std::sqrt(1 - x * x));
 }
@@ -189,17 +120,18 @@ long double First_Derivative_Phi(long double x) {
 
 
 std::tuple<long double, int> Simple_Iterations_Method(long double a, long double b, long double eps, std::ostream& log) {
-    long double q = 0.6; // |phi'(x) < 0.6|
-    long double x_prev = (a + b) / 2.;
-    long double x;
+    long double q = 0.6; // |phi'(x)| < 0.6
+    long double x_prev;
+    long double x  = (a + b) / 2.;
     int count = 0;
     do
     {
+        x_prev = x;
         count++;
         x = phi(x_prev);
         log << std::setprecision(7) << std::fixed  << x << ' ' << f(x) << ' ' << First_Derivative(x) << ' ' << - f(x) / First_Derivative(x) << '\n';
         
-    } while (q/(1 - q) * std::abs(x - x_prev) >= eps && (x_prev = x));
+    } while (q/(1 - q) * std::abs(x - x_prev) >= eps);
     
     return std::make_tuple(x, count);
 }
@@ -209,15 +141,15 @@ std::tuple<long double, int> Simple_Iterations_Method(long double a, long double
 
 //Task2
 
+
+//Newton
 long double f1(long double x1, long double x2) {
     return (x1 * x1 + 16.) * x2 - 64.;
 }
 
-
 long double f2(long double x1, long double x2) {
     return std::pow((x1 - 2.), 2.) + std::pow((x2 - 2.), 2.) - 16;
 }
-
 
 long double df1_dx1(long double x1, long double x2) {
     return 2 * x1 * x2;
@@ -233,7 +165,6 @@ long double df2_dx1(long double x1, long double x2) {
 long double df2_dx2(long double x1, long double x2) {
     return 2 * (x2 - 2);
 }
-
 
 TMatrix Jacobi_Matrix(long double x1, long double x2) {
     TMatrix J(2);
@@ -271,7 +202,7 @@ std::tuple<TMatrix, int> Dimentional_Newton_Method(long double eps, std::ostream
     TMatrix x_prev(2, (size_t)1);
     TMatrix x(2, (size_t)1);
     x[0][0] = 5.5;
-    x[1][0] = 1.;
+    x[1][0] = 2.;
 
     int count = 0;
 
@@ -289,8 +220,67 @@ std::tuple<TMatrix, int> Dimentional_Newton_Method(long double eps, std::ostream
         x[0][0] = x_prev[0][0] - det_A1 / det_J;
         x[1][0] = x_prev[1][0] - det_A2 / det_J;
 
+        log << "\nk = " << count << '\n' << "x_1 = " << x[0][0] << " x_2 = " << x[1][0] << '\n';
+
     } while(TMatrix(x - x_prev).Norm() >= eps);
 
     return std::make_tuple(x, count);
 
 }
+
+
+
+
+
+
+//Iterations
+
+long double phi1(long double x1 = 0., long double x2 =  0.) {
+    return std::sqrt(16 - std::pow((x2 - 2), 2.)) + 2;
+}
+
+long double phi2(long double x1, long double x2 = 0.) {
+    return 64. / (x1 * x1 + 16);
+}
+
+long double dphi1_dx1 (long double x1 = 0., long double x2 =  0.) {
+    return 0.;
+}
+
+long double dphi1_dx2 (long double x1 = 0., long double x2 =  0.) {
+    return (x2 - 2.) / (std::sqrt(-x2 * x2 + 4 * x2 + 12));;
+}
+
+long double dphi2_dx1 (long double x1 = 0., long double x2 =  0.) {
+    return -128 * x1 / std::pow((x1 * x1 + 16), 2);
+}
+
+long double dphi2_dx2 (long double x1 = 0., long double x2 =  0.) {
+    return 0.;
+}
+
+
+std::tuple<TMatrix, int> Dimentional_Simple_Iterations_Method(long double eps, std::ostream& log) {
+    long double q = 0.5;
+    TMatrix x_prev(2, size_t(1));
+    TMatrix x(2, (size_t)1);
+    x[0][0] = 5.5;
+    x[1][0] = 2.;
+
+    int count = 0;
+    do
+    {
+        x_prev = x;
+        x[0][0] = phi1(x_prev[0][0], x_prev[1][0]);
+        x[1][0] = phi2(x_prev[0][0], x_prev[1][0]);
+        count++;
+
+        log << "\nk = " << count << '\n' << "x_1 = " << x[0][0] << " x_2 = " << x[1][0] << '\n';
+
+    } while (q / (1 - q) * TMatrix(x - x_prev).Norm() >= eps);
+
+    return std::make_tuple(x, count);
+    
+}
+
+

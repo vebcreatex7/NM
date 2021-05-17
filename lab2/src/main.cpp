@@ -35,16 +35,20 @@ void Task2() {
     myFile >> eps;
     myFile.close();
 
-    std::fstream log("../logs/log2.1.txt", std::ios::out);
-    auto [x, count] = Dimentional_Newton_Method(eps, log);
-    log.close();
+    std::fstream log1("../logs/log2.1.txt", std::ios::out);
+    std::fstream log2("../logs/log2.2.txt", std::ios::out);
+    auto [x1, count1] = Dimentional_Newton_Method(eps, log1);
+    auto [x2, count2] = Dimentional_Simple_Iterations_Method(eps, log2);
+    log1.close();
+    log2.close();
 
     myFile.open("../ans/a2.txt");
-    myFile << "Newton Method:\n" << "x:\n" << x << "\nNumber of iterations: " << count << "\n\n";
+    myFile << "Newton Method:\n" << "x:\n" << x1 << "\nNumber of iterations: " << count1 << "\n\n"
+            << "Simple Iterations Method:\n" << "x:\n" << x2 << "\nNumber of iterations: " << count2 << "\n\n";
 
 }
 int main() {
-    //Task1();
+    Task1();
     Task2();
 
     return 0;

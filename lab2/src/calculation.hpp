@@ -19,13 +19,11 @@ int Sign(long double d);
 
 
 std::tuple<long double, int> Newton_Method(long double a, long double b, long double eps, std::ostream& log);
-
-
 std::tuple<long double, int> Simple_Iterations_Method(long double a, long double b, long double eps, std::ostream& log);
 
 
 //Task2
 
 std::tuple<TMatrix, int> Dimentional_Newton_Method(long double eps, std::ostream& log);
-
+std::tuple<TMatrix, int> Dimentional_Simple_Iterations_Method(long double eps, std::ostream& log);
 
