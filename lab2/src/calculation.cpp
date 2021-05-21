@@ -80,17 +80,17 @@ long double First_Derivative(long double x) {
     return -x / sqrt(1 - std::pow(x, 2.)) - exp(x);
 }
 
-/*
+
 long double Second_Derivative(long double x) {
     return -std::pow(x, 2.) / std::pow((1 - x * x), 3/2) - 1 / sqrt(1 - x * x) - exp(x);
 }
-*/
+
 
 
 
 std::tuple<long double, int> Newton_Method(long double a, long double b, long double eps, std::ostream& log) {
     long double x_prev;
-    long double x = b;
+    long double x = f(a) * Second_Derivative(a) > 0 ? a : b;
     int count = 0;
     do {
         x_prev = x;

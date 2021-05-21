@@ -17,7 +17,7 @@ void Task1() {
     std::fstream log1("../logs/log1.1.txt", std::ios::out);
     std::fstream log2("../logs/log1.2.txt", std::ios::out);
     auto [x1, count1] = Newton_Method(0, 0.5, eps, log1);
-    auto [x2, count2] = Simple_Iterations_Method(0, 0.5, eps, log2);
+    auto [x2, count2] = Simple_Iterations_Method(0, 1, eps, log2);
     log1.close();
     log2.close();
 

@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -ggdb   CMakeFiles/lab3.dir/src/main.cpp.o CMakeFiles/lab3.dir/src/matrix.cpp.o CMakeFiles/lab3.dir/src/calculation.cpp.o  -o lab3 
