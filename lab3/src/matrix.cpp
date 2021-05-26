@@ -6,6 +6,7 @@
 long double LU_Determinant(TMatrix const& U, std::vector<std::pair<size_t, size_t>> const & P);
 TMatrix LU_Inverse_Matrix(TMatrix const& L, TMatrix const& U, std::vector<std::pair<size_t, size_t>> const& p);
 int Sign(long double d);
+TMatrix LU_Solving_System(TMatrix const& L, TMatrix const& U, TMatrix b, std::vector<std::pair<size_t, size_t>> const& p);
 
 
 TMatrix::TMatrix(size_t n, long double elem) : TMatrix(n, n, elem) {}

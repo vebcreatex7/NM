@@ -6,7 +6,7 @@ import numpy as np
 y = [0, 0.36892, 0.85408, 1.7856, 6.3138]
 
 
-table = np.loadtxt("../logs/log2.txt", dtype='f')
+table = np.loadtxt('/home/courage/sem6/NM/lab3/logs/log2.txt', dtype='f')
 
 x_start = 0
 x_step = 0.9

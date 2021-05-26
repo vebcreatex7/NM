@@ -2,6 +2,8 @@
 #include <algorithm>
 
 
+
+
 TMatrix Tridiagonal_Algorithm(TMatrix const& A, TMatrix const& D) {
     size_t n = A.Get_Rows();
     std::vector<long double> P(n);
@@ -208,4 +210,182 @@ std::tuple<std::vector<TSegment>, ld> Cubic_Spline(std::vector<ld> const& x, std
     return std::make_tuple(seg_, f_x);
 
     
+}
+
+
+//Task4
+
+ld First_Derivative(std::vector<ld> const& x, std::vector<ld> const& y, ld Point, size_t i) {
+    ld part1 = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);
+    ld part2 = ((y[i + 2] - y[i + 1]) / (x[i + 2] - x[i + 1]) - part1) / (x[i + 2] - x[i]) * (2. * Point - x[i] - x[i + 1]);
+    return part1 + part2;
+}
+
+ld Second_Derivative(std::vector<ld> const& x, std::vector<ld> const& y, ld Point, size_t i) {
+    ld part1 = (y[i + 2] - y[i + 1]) / (x[i + 2] - x[i + 1]);
+    ld part2 = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);
+    return 2. * (part1 - part2) / (x[i + 2] - x[i]);
+}
+
+std::tuple<ld, ld> Numerical_Differentiation(std::vector<ld> const& x, std::vector<ld> const& y, ld Point) {
+    auto it = std::lower_bound(x.begin(), x.end(), Point);
+    size_t i = it - x.begin() - 1;
+    return std::make_tuple(First_Derivative(x, y, Point, i), Second_Derivative(x, y, Point, i));
+
+
+
+}
+
+
+std::tuple<TMatrix, std::string> Approximating_Polynomial_First_Degree(std::vector<ld> const& x, std::vector<ld> const& y) {
+    size_t d = 2;
+    TMatrix A(d);
+    TMatrix b(d, (size_t)1);
+    size_t n = x.size();
+    A[0][0] = n;
+    for (auto a : x)
+        A[0][1] += a;
+    A[1][0] = A[0][1];
+    for (auto a : x)
+        A[1][1] += a * a;
+
+    for (auto a : y)
+        b[0][0] += a;
+    for (size_t i = 0; i != x.size(); i++)
+        b[1][0] += x[i] * y[i];
+
+
+    auto [L, U, P] = A.LUdecomposition();
+    
+    TMatrix a = LU_Solving_System(L, U, b, P);
+
+    std::string Polynomial = std::to_string(a[0][0]);
+    if (a[1][0] > 0.)
+        Polynomial += " + ";
+    Polynomial += std::to_string(a[1][0]) + "x";
+
+    return std::make_tuple(a, Polynomial);
+
+}
+
+std::tuple<TMatrix, std::string> Approximating_Polynomial_Second_Degree(std::vector<ld> const& x, std::vector<ld> const& y) {
+    size_t d = 3;
+    TMatrix A(d);
+    TMatrix b(d, (size_t)1);
+
+    A[0][0] = (ld)x.size();
+    for (auto a : x) {
+        A[0][1] += a;
+        A[0][2] += a * a;
+        A[1][2] += a * a * a;
+        A[2][2] += a * a * a * a;
+    }
+
+    A[1][0] = A[0][1];
+
+    A[1][1] = A[0][2];
+    A[2][0] = A[1][1];
+
+    A[2][1] = A[1][2];
+
+    for (size_t i = 0; i != y.size(); i++) {
+        b[0][0] += y[i];
+        b[1][0] += x[i] * y[i];
+        b[2][0] += x[i] * x[i] * y[i];
+    }
+
+    auto [L, U, P] = A.LUdecomposition();
+    TMatrix a = LU_Solving_System(L, U, b, P);
+
+    std::string Polynomial = std::to_string(a[0][0]);
+    if (a[1][0] > 0.)
+        Polynomial += " + ";
+    Polynomial += std::to_string(a[1][0]) + "x";
+
+    if (a[2][0] > 0.)
+        Polynomial += " + ";
+    Polynomial += std::to_string(a[2][0]) + "x^2";
+
+    return std::make_tuple(a, Polynomial);
+        
+}
+
+ld F_1(TMatrix a, ld x) {
+    return a[0][0] + a[1][0] * x;
+}
+
+ld F_2(TMatrix a, ld x) {
+    return a[0][0] + a[1][0] * x + a[2][0] * x * x;
+}
+
+std::tuple<std::string, ld, std::string, ld> Least_Square_Method(std::vector<ld> const& x, std::vector<ld> const& y) {
+    size_t n = x.size();
+    auto [a1, p1] = Approximating_Polynomial_First_Degree(x, y);
+
+    ld PHI1 = 0.;
+    for (size_t i = 0; i != n; i++)
+        PHI1 += std::pow(F_1(a1, x[i]) - y[i], 2.);
+    
+    auto [a2, p2] = Approximating_Polynomial_Second_Degree(x, y);
+
+    ld PHI2 = 0;
+    for (size_t i = 0; i != n; i++)
+        PHI2 += std::pow(F_2(a2, x[i]) - y[i], 2.);
+
+    return std::make_tuple(p1, PHI1, p2, PHI2);
+
+}
+
+
+//Task5
+
+ld y(ld x) {
+    return x / std::pow((3. * x + 4.), 3.);
+}
+
+ld Rectangle_Method(ld x_0, ld x_k, ld h) {
+    int n = int(x_k - x_0) / h;
+    ld F = 0.;
+    
+    ld x_cur = x_0;
+    for (int i = 0; i != n - 1; i++) {
+        F += y((x_cur + x_cur + h) / 2.);
+        x_cur += h;
+    } 
+    F *= h;
+    return F;
+}
+
+
+ld Trapezoid_Method(ld x_0, ld x_k, ld h) {
+    int n = int(x_k - x_0) / h;
+    ld F = 0.;
+
+    ld x_cur = x_0;
+    for (int i = 0; i != n - 1; i++) {
+        F += (y(x_cur) + y(x_cur + h));
+        x_cur += h;
+    }
+
+    F *= (h / 2.);
+
+    return F;
+}
+
+
+ld Simpson_Method(ld x_0, ld x_k, ld h) {
+    int n = int(x_k - x_0) / h;
+    ld F = 0.;
+
+    ld x_cur = x_0;
+    for (int i = 0; i != n - 2; i++) {
+        F += (y(x_cur) + 4 * y(x_cur + h) + y(x_cur + 2 * h));
+        x_cur +=2 * h;
+    }
+    F *= (h / 3.);
+    return F;
+}
+
+ld Runge_Romberg_Richardson_Method (ld F_half,ld F,ld p) {
+    return (F_half - F) / (std::pow(2, p) - 1);
 }

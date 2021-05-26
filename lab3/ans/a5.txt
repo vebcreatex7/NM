@@ -1,0 +1,16 @@
+Exact Solution: -0.12245
+
+h1 = 0.5
+Rectangle Method: -0.0724458
+Trapezoid Method: -0.265249
+Simpson Method: -0.185511
+
+h2 = 0.25
+Rectangle Method: -0.103192
+Trapezoid Method: -0.168088
+Simpson Method: -0.132747
+
+Runge Romberg Richardson Method:
+for Rectangle Method: -0.0307457
+for Trapezoid Method: 0.032387
+for Simpson Method: 0.00753763

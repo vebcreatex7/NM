@@ -61,4 +61,4 @@ public:
 };
 
 
-
+TMatrix LU_Solving_System(TMatrix const& L, TMatrix const& U, TMatrix b, std::vector<std::pair<size_t, size_t>> const& p);

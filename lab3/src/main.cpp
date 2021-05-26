@@ -85,7 +85,98 @@ void task2() {
 
 }
 
+
+void task4() {
+    std::fstream myFile("../tasks/t4.txt", std::ios::in);
+    size_t n;
+    myFile >> n;
+    std::vector<ld> x(n);
+    std::vector<ld> y(n);
+    for (auto & a : x)
+        myFile >> a;
+    for (auto & a : y)
+        myFile >> a;
+
+    ld Point;
+    myFile >> Point;
+    myFile.close();
+
+
+    myFile.open("../ans/a4.txt", std::ios::out);
+    auto [d1, d2] =  Numerical_Differentiation(x, y, Point);
+    myFile << d1 << ' ' << d2 << '\n';
+    myFile.close();
+
+}
+
+void task3() {
+    std::fstream myFile("../tasks/t3.txt", std::ios::in);
+    size_t n;
+    myFile >> n;
+    std::vector<ld> x(n);
+    std::vector<ld> y(n);
+    for (auto & a : x)
+        myFile >> a;
+    for (auto & a : y)
+        myFile >> a;
+
+    myFile.close();
+
+
+    auto [p1, PHI1, p2, PHI2] = Least_Square_Method(x, y);
+
+    myFile.open("../ans/a3.txt", std::ios::out);
+
+    myFile << "F1(x) = " << p1 << '\n'
+            << "PHI = " << PHI1 << '\n'
+            << "F2(x) = " << p2 << '\n'
+            << "PHI = " << PHI2 << '\n';
+
+    myFile.close();
+}
+
+void task5() {
+    std::fstream myFile("../tasks/t5.txt", std::ios::in);
+    ld x_0, x_k, h1, h2;
+    myFile >> x_0 >> x_k >> h1 >> h2;
+    myFile.close();
+
+    ld Exact_Solution = -0.12245;
+
+    ld R1 = Rectangle_Method(x_0, x_k, h1);
+    ld T1 = Trapezoid_Method(x_0, x_k, h1);
+    ld S1 = Simpson_Method(x_0, x_k, h1);
+
+    ld R2 = Rectangle_Method(x_0, x_k, h2);
+    ld T2 = Trapezoid_Method(x_0, x_k, h2);
+    ld S2 = Simpson_Method(x_0, x_k, h2);
+
+    ld posteriori_R = Runge_Romberg_Richardson_Method(R2, R1, 1);
+    ld posteriori_T = Runge_Romberg_Richardson_Method(T2, T1, 2);
+    ld posteriori_S = Runge_Romberg_Richardson_Method(S2, S1, 3);
+
+
+
+    myFile.open("../ans/a5.txt", std::ios::out);
+    myFile  << "Exact Solution: " << Exact_Solution << "\n\n"
+            << "h1 = " << h1 << '\n'
+            << "Rectangle Method: " << R1 <<'\n'
+            << "Trapezoid Method: " << T1 << '\n'
+            << "Simpson Method: " << S1 << "\n\n"
+            << "h2 = " << h2 << '\n'
+            << "Rectangle Method: " << R2 << '\n'
+            << "Trapezoid Method: " << T2 << '\n'
+            << "Simpson Method: " << S2 << "\n\n"
+            << "Runge Romberg Richardson Method:\n" 
+            << "for Rectangle Method: " << posteriori_R << '\n'
+            << "for Trapezoid Method: " << posteriori_T << '\n'
+            << "for Simpson Method: " << posteriori_S << '\n';
+}
+
 int main() {
-    //task1();
+    task1();
     task2();
+    task3();
+    task4();
+    task5();
 }

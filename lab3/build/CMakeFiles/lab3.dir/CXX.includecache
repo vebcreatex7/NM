@@ -24,6 +24,12 @@ cmath
 complex
 -
 
+/home/courage/sem6/NM/lab3/src/calculation.cpp
+calculation.hpp
+/home/courage/sem6/NM/lab3/src/calculation.hpp
+algorithm
+-
+
 /home/courage/sem6/NM/lab3/src/calculation.hpp
 string
 -
@@ -33,12 +39,6 @@ matrix.hpp
 /home/courage/sem6/NM/lab3/src/matrix.hpp
 Segment.hpp
 /home/courage/sem6/NM/lab3/src/Segment.hpp
-
-/home/courage/sem6/NM/lab3/src/main.cpp
-calculation.hpp
-/home/courage/sem6/NM/lab3/src/calculation.hpp
-matrix.hpp
-/home/courage/sem6/NM/lab3/src/matrix.hpp
 
 /home/courage/sem6/NM/lab3/src/matrix.hpp
 iostream
