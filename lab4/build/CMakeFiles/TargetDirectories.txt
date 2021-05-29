@@ -1,0 +1,3 @@
+/home/courage/sem6/NM/lab4/build/CMakeFiles/rebuild_cache.dir
+/home/courage/sem6/NM/lab4/build/CMakeFiles/edit_cache.dir
+/home/courage/sem6/NM/lab4/build/CMakeFiles/lab4.dir

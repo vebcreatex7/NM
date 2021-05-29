@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall   CMakeFiles/lab4.dir/src/main.cpp.o CMakeFiles/lab4.dir/src/calculation.cpp.o CMakeFiles/lab4.dir/src/matrix.cpp.o  -o lab4 
