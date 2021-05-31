@@ -105,22 +105,23 @@ void Print2(std::vector<ld> const & x, std::vector<ld> const y, std::vector<ld> 
 }
 
 void Task2() {
-    std::fstream myFile("../tasks/t2.txt");
+    std::fstream myFile("../tasks/t2.txt", std::ios::in);
     ld h;
     myFile >> h;
     ld x_0 = 1.;
     ld x_k = 2.;
     myFile.close();
 
-    std::fstream log("../logs/log2.1.txt");
+    std::ofstream log("../logs/log2.1.txt");
     auto [x1, y1] = Finite_Difference_Method(h, x_0, x_k, &log);
     auto Runge = Runge_Estimate_for_Finite_Defference(y1, x_0, x_k, h);
     log.close();
 
-    myFile.open("../ans/a2.txt");
+    myFile.open("../ans/a2.txt", std::ios::out);
 
     myFile << "Finite Defference Method\n";
     Print2(x1, y1, Runge, myFile);
+    myFile.close();
 }
 
 

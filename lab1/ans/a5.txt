@@ -1,5 +1,7 @@
-lambda_1 = -5.41475 + -5.83019i
-lambda_2 = -5.41475 + 5.83019i
-lambda_3 = 4.8295
+lambda_1 = -11.6437
+lambda_2 = -2.56781 + -4.10233i
+lambda_3 = -2.56781 + 4.10233i
+lambda_4 = 0.397411
+lambda_5 = 5.38195
 
-QR Algorithm took 20 iterations
+QR Algorithm took 261 iterations

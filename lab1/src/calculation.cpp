@@ -372,18 +372,19 @@ std::vector<std::complex<long double>> Solve_Quadratic_Equation(TMatrix const& A
 std::tuple<std::vector<std::complex<long double>>, int> Eigenvalues_Using_QR(TMatrix const& A, long double eps, std::ostream& log) {
     std::vector<std::array<std::complex<long double>, 2>> Eigens(A.Get_Rows());
     TMatrix A_k = A;
-    bool stop;
+    bool stop = true;
     size_t count = 0;
-    while (1) {
+    while (stop) {
+    /*
         stop = true;
         for (size_t i = 0; i != A.Get_Rows(); i++) {
             if (A_k.GetSquaredColumnSum(i + 1, i) < eps) {
-                stop = stop and (std::abs(std::abs(Eigens[i][0]) - A_k[i][i]) < eps);
+                stop = stop && std::abs(std::abs(Eigens[i][0]) - A_k[i][i]) < eps;
                 Eigens[i][0] = A_k[i][i];
                 Eigens[i][1] = {};
             } else if (A_k.GetSquaredColumnSum(i + 2, i) < eps) {
                 auto Roots = Solve_Quadratic_Equation(A_k, i);
-                stop = stop and (std::abs(std::abs(Eigens[i][0]) - std::abs(Roots[0]))) < eps;
+                stop = stop && (std::abs(std::abs(Eigens[i][0]) - std::abs(Roots[0]))) < eps;
                 Eigens[i][0] = Roots[0];
                 Eigens[i][1] = Roots[1];
                 i++;
@@ -397,10 +398,34 @@ std::tuple<std::vector<std::complex<long double>>, int> Eigenvalues_Using_QR(TMa
         auto [Q, R] = A_k.QRdecomposition();
         A_k = R * Q;
         count++;
+        */
+        count++;
+        auto [Q, R] = A_k.QRdecomposition();
+        A_k = R * Q;
         log << "Q_" << count - 1 << ":\n" << Q << "\n"
             << "R_" << count - 1 << ":\n" << R << "\n"
             << "A_" << count << ":\n" << A_k << "\n";
+        
+        stop = false;
+
+        for (size_t i = 0 ;i < A_k.Size(); i++) {
+            long double check = A_k.GetSquaredColumnSum(i + 1, i);
+
+            if (check > eps) {
+                auto Roots = Solve_Quadratic_Equation(A_k, i);
+                if (std::abs(std::abs(Eigens[i][0]) - std::abs(Roots[0])) > eps)
+                    stop = true;
+                Eigens[i][0] = Roots[0];
+                Eigens[i][1] = Roots[1];
+                i++;
+            } else {
+                Eigens[i][0] = A_k[i][i];
+                Eigens[i][1] = {};
+            }
+
+        }
     }
+
     std::vector<std::complex<long double>> result;
     for (size_t i = 0; i < Eigens.size(); i++) {
         if (std::abs(Eigens[i][1]) < eps) {
