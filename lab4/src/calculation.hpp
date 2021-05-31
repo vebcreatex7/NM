@@ -5,6 +5,7 @@
 #include <vector>
 #include <tuple>
 #include <iomanip>
+#include <limits>
 #define ld long double
 
 
@@ -32,3 +33,7 @@ std::vector<ld> Runge_Estimate_for_Adams(std::vector<ld> const & y, ld x_0, ld x
 ld y_exact2(ld x);
 std::tuple<std::vector<ld>, std::vector<ld>> Finite_Difference_Method(ld h, ld x_0, ld x_k, std::ostream* log = nullptr);
 std::vector<ld> Runge_Estimate_for_Finite_Defference(std::vector<ld> const & y, ld x_0, ld x_k, ld h);
+
+ld y_exact3(ld x);
+std::tuple<std::vector<ld>, std::vector<ld>> Shooting_Method(ld h, ld x_0, ld x_k, std::ostream* log = nullptr);
+std::vector<ld> Runge_Estimate_for_Shooting(std::vector<ld> const & y, ld x_0, ld x_k, ld h);

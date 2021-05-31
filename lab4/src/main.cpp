@@ -125,11 +125,61 @@ void Task2() {
 }
 
 
+//Shooting
+
+void Print3(std::vector<ld> const & x, std::vector<ld> const y, std::vector<ld> const & est, std::ostream & myFile) {
+    for (size_t i = 0; i != x.size(); i++)
+        myFile <<  std::setw(7)  << i << ' ';
+    myFile << '\n';
+
+    myFile << std::setw(6) << std::left << "x_k:";
+    for (size_t i = 0; i != x.size(); i++)
+        myFile << std::setprecision(5) << std::fixed << x[i] << ' ';
+    myFile << '\n';
+    myFile << std::setw(6) << std::left << "y_k:";
+    for (size_t i = 0; i != x.size(); i++)
+        myFile  << y[i] << ' ';
+    myFile << '\n';
+
+    myFile << std::setw(6) << std::left << "eps_k:";
+    for (size_t i = 0; i != x.size(); i++)
+        myFile  << eps(y[i], y_exact3(x[i])) << ' ';
+    myFile << '\n';
+    
+
+    myFile << std::setw(6) << std::left << "Runge:";
+    for (size_t i = 0; i != x.size(); i++)
+        myFile  << est[i] << ' ';
+    myFile << '\n';
+}
+
+void Shooting() {
+    std::fstream myFile("../tasks/t2.txt", std::ios::in);
+    ld h;
+    myFile >> h;
+    ld x_0 = 1.;
+    ld x_k = 2.;
+    myFile.close();
+
+
+    std::ofstream log("../logs/log2.2.txt");
+    auto [x, y] = Shooting_Method(h, x_0, x_k, &log);
+    log.close();
+
+    myFile.open("../ans/shooting.txt", std::ios::out);
+    std::vector<ld> est = Runge_Estimate_for_Shooting(y, x_0, x_k, h);
+    Print3(x, y, est, myFile);
+    myFile.close();
+
+}
+
+
 int main() {
 
 
-    //Task1();
+    Task1();
     Task2();
+    Shooting();
 
     return 0;
 }
