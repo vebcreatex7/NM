@@ -375,30 +375,6 @@ std::tuple<std::vector<std::complex<long double>>, int> Eigenvalues_Using_QR(TMa
     bool stop = true;
     size_t count = 0;
     while (stop) {
-    /*
-        stop = true;
-        for (size_t i = 0; i != A.Get_Rows(); i++) {
-            if (A_k.GetSquaredColumnSum(i + 1, i) < eps) {
-                stop = stop && std::abs(std::abs(Eigens[i][0]) - A_k[i][i]) < eps;
-                Eigens[i][0] = A_k[i][i];
-                Eigens[i][1] = {};
-            } else if (A_k.GetSquaredColumnSum(i + 2, i) < eps) {
-                auto Roots = Solve_Quadratic_Equation(A_k, i);
-                stop = stop && (std::abs(std::abs(Eigens[i][0]) - std::abs(Roots[0]))) < eps;
-                Eigens[i][0] = Roots[0];
-                Eigens[i][1] = Roots[1];
-                i++;
-            } else {
-                stop = false;
-            }
-        }
-        if (stop)
-            break;
-
-        auto [Q, R] = A_k.QRdecomposition();
-        A_k = R * Q;
-        count++;
-        */
         count++;
         auto [Q, R] = A_k.QRdecomposition();
         A_k = R * Q;
