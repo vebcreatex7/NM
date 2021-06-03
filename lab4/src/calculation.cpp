@@ -6,17 +6,17 @@ ld eps(ld y1, ld y2) {
     return std::abs(y1 - y2);
 }
 
-
-//Task1
 ld Runge(ld y_half, ld y, int p) {
     return (y_half - y) / (std::pow(2., p) - 1.);
 }
+
+//Task1
+
 
 ld y_exact1(ld x) {
     return std::exp(x * x) + std::exp(x * std::sqrt(2)) + std::exp(-x * std::sqrt(2));
     
 }
-
 
 ld f1(ld x, ld y, ld z) {
     return z;
@@ -31,16 +31,16 @@ ld f2(ld x, ld y, ld z) {
 
 //Euler
 
-std::tuple<std::vector<ld>, std::vector<ld>> Euler_Method(ld h,  ld x_0, ld x_k, std::ostream* log) {
-    size_t n = (size_t)((x_k - x_0) / h);
+std::tuple<std::vector<ld>, std::vector<ld>> Euler_Method(ld h, ld x_0, ld x_1, ld y_0, ld z_0, std::ostream* log) {
+    size_t n = (size_t)((x_1 - x_0) / h);
     std::vector<ld> x(n + 1);
     std::vector<ld> y(n + 1);
     std::vector<ld> z(n + 1);
 
     
-    x[0] = 0.;
-    y[0] = 3.;
-    z[0] = 0.;
+    x[0] = x_0;
+    y[0] = y_0;
+    z[0] = z_0;
     
 
     for (size_t i = 0; i != n; i++) {
@@ -50,6 +50,7 @@ std::tuple<std::vector<ld>, std::vector<ld>> Euler_Method(ld h,  ld x_0, ld x_k,
     }
     
     if (log) {
+
         for (auto a : x)
             *log << a << ' ';
         *log << '\n';
@@ -63,8 +64,8 @@ std::tuple<std::vector<ld>, std::vector<ld>> Euler_Method(ld h,  ld x_0, ld x_k,
 }
 
 
-std::vector<ld> Runge_Estimate_for_Euler(std::vector<ld> const & y, ld x_0, ld x_k, ld h){
-    auto [x_half, y_half] = Euler_Method(h / 2., x_0, x_k);
+std::vector<ld> Runge_Estimate_for_Euler(std::vector<ld> const & y,ld h, ld x_0, ld x_1, ld y_0, ld z_0){
+    auto [x_half, y_half] = Euler_Method(h / 2., x_0, x_1, y_0, z_0);
     size_t n = y.size();
     std::vector<ld> phi(n);
 
@@ -79,15 +80,15 @@ std::vector<ld> Runge_Estimate_for_Euler(std::vector<ld> const & y, ld x_0, ld x
 //Runge-Kutta
 
 
-std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method(ld h, ld x_0, ld x_k, std::ostream* log) {
-    size_t n = (size_t)((x_k - x_0) / h);
+std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method(ld h, ld x_0, ld x_1, ld y_0, ld z_0, std::ostream* log) {
+    size_t n = (size_t)((x_1 - x_0) / h);
     std::vector<ld> x(n + 1);
     std::vector<ld> y(n + 1);
     std::vector<ld> z(n + 1);
 
-    x[0] = 0.;
-    y[0] = 3.;
-    z[0] = 0.;
+    x[0] = x_0;
+    y[0] = y_0;
+    z[0] = z_0;
     
 
     for (size_t i = 0; i != n; i++) {
@@ -110,6 +111,7 @@ std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method
     }
 
     if (log) {
+
         for (auto a : x)
             *log << a << ' ';
         *log << '\n';
@@ -123,13 +125,13 @@ std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method
 }
 
 
-std::vector<ld> Runge_Estimate_for_Runge_Kutta(std::vector<ld> const & y, ld x_0, ld x_k, ld h) {
-    auto [x_half, y_half, other] = Runge_Kutta_Method(h / 2., x_0, x_k);
+std::vector<ld> Runge_Estimate_for_Runge_Kutta(std::vector<ld> const & y,ld h, ld x_0, ld x_1, ld y_0, ld z_0) {
+    auto [x_half, y_half, other] = Runge_Kutta_Method(h / 2., x_0, x_1, y_0, z_0);
     size_t n = y.size();
     std::vector<ld> phi(n);
 
     for (size_t i = 0; i != n; i++)
-        phi[i] = Runge(y_half[i], y[i], 4);
+        phi[i] = Runge(y_half[2 * i], y[i], 4);
 
     return phi;
 }
@@ -137,9 +139,9 @@ std::vector<ld> Runge_Estimate_for_Runge_Kutta(std::vector<ld> const & y, ld x_0
 
 //Adams
 
-std::tuple<std::vector<ld>, std::vector<ld>> Adams_Method(ld h, ld x_0, ld x_k, std::ostream* log) {
-    size_t n = (size_t)((x_k - x_0) / h);
-    auto [x_Runge, y_Runge, z_Runge] = Runge_Kutta_Method(h, x_0, 3. * h + x_0);
+std::tuple<std::vector<ld>, std::vector<ld>> Adams_Method(ld h, ld x_0, ld x_1, ld y_0, ld z_0, std::ostream* log) {
+    size_t n = (size_t)((x_1 - x_0) / h);
+    auto [x_Runge, y_Runge, z_Runge] = Runge_Kutta_Method(h, x_0, 3. * h + x_0, y_0, z_0);
 
     std::vector<ld> f1_(n);
     std::vector<ld> f2_(n);
@@ -168,6 +170,7 @@ std::tuple<std::vector<ld>, std::vector<ld>> Adams_Method(ld h, ld x_0, ld x_k, 
     }
 
     if (log) {
+
         for (auto a : x)
             *log << a << ' ';
         *log << '\n';
@@ -183,13 +186,13 @@ std::tuple<std::vector<ld>, std::vector<ld>> Adams_Method(ld h, ld x_0, ld x_k, 
 
 }
 
-std::vector<ld> Runge_Estimate_for_Adams(std::vector<ld> const & y, ld x_0, ld x_k, ld h) {
-    auto [x_half, y_half] = Adams_Method(h / 2., x_0, x_k);
+std::vector<ld> Runge_Estimate_for_Adams(std::vector<ld> const & y,ld h, ld x_0, ld x_1, ld y_0, ld z_0) {
+    auto [x_half, y_half] = Adams_Method(h / 2., x_0, x_1, y_0, z_0);
     size_t n = y.size();
     std::vector<ld> phi(n);
 
     for (size_t i = 0; i != n; i++)
-        phi[i] = Runge(y_half[i], y[i], 4);
+        phi[i] = Runge(y_half[2 * i], y[i], 4);
 
     return phi;
 
@@ -260,12 +263,12 @@ ld f(ld x) {
 
 
 
-std::tuple<std::vector<ld>, std::vector<ld>> Finite_Difference_Method(ld h, ld x_0, ld x_k, std::ostream* log) {
-    size_t n = (size_t)((x_k - x_0) / h);
-    ld alpha = 0.;
-    ld betta = -0.5;
-    ld y_a = -1.;
-    ld y_b = -1.;
+std::tuple<std::vector<ld>, std::vector<ld>> Finite_Difference_Method(ld h, ld x_0, ld x_1, ld a_0, ld a_1, ld alpha, ld b_0, ld b_1, ld beta, std::ostream* log) {
+    size_t n = (size_t)((x_1 - x_0) / h);
+    a_0 = a_1 == 0 ? a_0 : a_0 / a_1;
+    b_0 = b_1 == 0 ? b_0 : b_0 / b_1;
+    alpha = a_1 == 0 ? alpha : alpha / a_1;
+    beta = b_1 == 0 ? beta : beta / b_1;
 
     std::vector<ld> x(n + 1);
     x[0] = x_0;
@@ -276,9 +279,9 @@ std::tuple<std::vector<ld>, std::vector<ld>> Finite_Difference_Method(ld h, ld x
     TMatrix d(n + 1, (size_t)1);
 
     A[0][0] = 0.;
-    A[0][1] = -2. / (h * (2 - p(x_0) * h)) + q(x_0) * h / (2. - p(x_0) * h) + alpha;
+    A[0][1] = -2. / (h * (2 - p(x_0) * h)) + q(x_0) * h / (2. - p(x_0) * h) + a_0;
     A[0][2] = 2. / (h * (2 - p(x_0) * h));
-    d[0][0] = y_a + h * f(x_0) / (2. - p(x_0) * h);
+    d[0][0] = alpha + h * f(x_0) / (2. - p(x_0) * h);
 
     for (size_t i = 1; i != n; i++) {
         A[i][0] = 1. / (h * h) - p(x[i]) / (2. * h);
@@ -288,9 +291,9 @@ std::tuple<std::vector<ld>, std::vector<ld>> Finite_Difference_Method(ld h, ld x
     }
 
     A[n][0] = -2. / (h * (2 + p(x[n]) * h));
-    A[n][1] = 2 / (h * (2. + p(x[n]) * h)) - q(x[n]) * h / (2. + p(x[n]) * h) + betta;
+    A[n][1] = 2 / (h * (2. + p(x[n]) * h)) - q(x[n]) * h / (2. + p(x[n]) * h) + b_0;
     A[n][2] = 0.;
-    d[n][0] = y_b - h * f(x[n]) / (2. + p(x[n]) * h);
+    d[n][0] = beta - h * f(x[n]) / (2. + p(x[n]) * h);
 
     TMatrix Matrix_y = Tridiagonal_Algorithm(A, d);
 
@@ -299,6 +302,7 @@ std::tuple<std::vector<ld>, std::vector<ld>> Finite_Difference_Method(ld h, ld x
         y[i] = Matrix_y[i][0];
 
     if (log) {
+
         for (auto a : x)
             *log << a << ' ';
         *log << '\n';
@@ -311,13 +315,13 @@ std::tuple<std::vector<ld>, std::vector<ld>> Finite_Difference_Method(ld h, ld x
 
 
 }
-std::vector<ld> Runge_Estimate_for_Finite_Defference(std::vector<ld> const & y, ld x_0, ld x_k, ld h) {
-    auto [x_half, y_half] = Finite_Difference_Method(h / 2., x_0, x_k);
+std::vector<ld> Runge_Estimate_for_Finite_Defference(std::vector<ld> const & y, ld h, ld x_0, ld x_1, ld a_0, ld a_1, ld alpha, ld b_0, ld b_1, ld beta) {
+    auto [x_half, y_half] = Finite_Difference_Method(h / 2., x_0, x_1, a_0, a_1, alpha, b_0, b_1, beta);
     size_t n = y.size();
     std::vector<ld> phi(n);
 
     for (size_t i = 0; i != n; i ++)
-        phi[i] = Runge(y_half[i], y[i], 1);
+        phi[i] = Runge(y_half[2 * i], y[i], 1);
     
     return phi;
 }
@@ -326,20 +330,18 @@ std::vector<ld> Runge_Estimate_for_Finite_Defference(std::vector<ld> const & y, 
 
 //Shooting
 
-ld y_exact3(ld x) {
-    return std::exp(-x) / x;
-}
 
 ld f1_s(ld x, ld y, ld z) {
     return z;
 }
 
 ld f2_s(ld x, ld y, ld z) {
-    return y - 2. * z / x;
+    return 2. * y / (x * x * (x + 1));
 }
 
-std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method_for_Shooting(ld h, ld x_0, ld x_k, ld y_0, ld eta) {
-    size_t n = (size_t)((x_k - x_0) / h);
+
+std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method_for_Shooting(ld h, ld x_0, ld x_1, ld y_0, ld z_0) {
+    size_t n = (size_t)((x_1 - x_0) / h);
     std::vector<ld> x(n + 1);
     std::vector<ld> y(n + 1);
     std::vector<ld> z(n + 1);
@@ -347,7 +349,7 @@ std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method
     
         x[0] = x_0;
         y[0] = y_0;
-        z[0] = eta;
+        z[0] = z_0;
 
 
     for (size_t i = 0; i != n; i++) {
@@ -372,41 +374,73 @@ std::tuple<std::vector<ld>, std::vector<ld>, std::vector<ld>> Runge_Kutta_Method
     return std::make_tuple(x, y, z);
 }
 
-ld Phi (ld y_eta) {
-    return y_eta - std::exp(-2.) / 2.;
+
+ld Phi (ld b_0, ld b_1, ld y_s, ld z_s, ld beta) {
+    return b_0 * y_s + b_1 * z_s - beta;
 }
 
 
-std::tuple<std::vector<ld>, std::vector<ld>> Shooting_Method(ld h, ld x_0, ld x_k, std::ostream* log) {
-    ld eps = 0.01;
-    size_t n = (size_t)((x_k - x_0) / h);
-    std::vector<ld> eta_;
-    ld a = 1.;
-    ld b = 2.;
-    ld y_0 = std::exp(-1.);
-    ld y_1 = std::exp(-2.) / 2.;
-    eta_.push_back(std::atan(1.));
-    eta_.push_back(eta_[0] / 2.);
-    
-    std::vector<ld> y_eta_;
-    y_eta_.push_back(std::get<1>(Runge_Kutta_Method_for_Shooting(h, a, b, y_0, eta_[0]))[n]);
-    y_eta_.push_back(std::get<1>(Runge_Kutta_Method_for_Shooting(h, a, b, y_0, eta_[1]))[n]);
-
+std::tuple<std::vector<ld>, std::vector<ld>> Shooting_Method(ld h, ld x_0, ld x_1, ld a_0, ld a_1, ld alpha, ld b_0, ld b_1, ld beta, std::ostream* log) {
     std::vector<ld> x;
     std::vector<ld> y;
 
-    size_t i = 1;
+    ld eps = 0.01;
+    size_t n = (size_t)((x_1 - x_0) / h);
+    std::vector<ld> s;
+    ld y_0, z_0;
+
+    ld C_0, C_1;
+    if (a_0 == 0.) {
+        C_0 = -1. / a_1;
+        C_1 = 0.;
+    } else {
+        C_0 = 0.;
+        C_1 = -1. / a_0;
+    }
+
+    s.push_back((x_1 + x_0) / 2.);
+    s.push_back(s[0] / 2.);
+
+    std::vector<ld> y_s;
+    std::vector<ld> z_s;
+
+    
+    y_0 = a_1 * s[0] - C_1 * alpha;
+    z_0 = a_0 * s[0] - C_0 * alpha;
+    auto ans1 = Runge_Kutta_Method_for_Shooting(h, x_0, x_1, y_0, z_0);
+        y_s.push_back(std::get<1>(ans1)[n]);
+        z_s.push_back(std::get<2>(ans1)[n]);
+    
+
+
+    y_0 = a_1 * s[1] - C_1 * alpha;
+    z_0 = a_0 * s[1] - C_0 * alpha;
+    auto ans2 = Runge_Kutta_Method_for_Shooting(h, x_0, x_1, y_0, z_0);
+        y_s.push_back(std::get<1>(ans2)[n]);
+        z_s.push_back(std::get<2>(ans2)[n]);
+
+
+
+    
+
+    size_t i = 2;
     while (true) {
-        ld eta_tmp = eta_[i] - (eta_[i] - eta_[i - 1]) / (Phi(y_eta_[i]) - Phi(y_eta_[i - 1])) * Phi(y_eta_[i]);
-        eta_.push_back(eta_tmp);
-        auto ans = Runge_Kutta_Method_for_Shooting(h, a, b, y_0, eta_tmp);
-        y_eta_.push_back(std::get<1>(ans)[n]);
-        i++;
-        if (std::abs(Phi(y_eta_[i])) < eps) {
+        ld current_s = s[i - 1] - (s[i - 1] - s[i - 2]) / (Phi(b_0, b_1, y_s[i - 1], z_s[i - 1], beta) - Phi(b_0, b_1, y_s[i - 2], z_s[i - 2], beta)) * Phi(b_0, b_1, y_s[i - 1], z_s[i - 1], beta);
+        s.push_back(current_s);
+        y_0 = a_1 * s[i] - C_1 * alpha;
+        z_0 = a_0 * s[i] - C_0 * alpha;
+        auto ans = Runge_Kutta_Method_for_Shooting(h, x_0, x_1, y_0, z_0);
+        y_s.push_back(std::get<1>(ans)[n]);
+        z_s.push_back(std::get<2>(ans)[n]);
+
+
+        if (std::abs(Phi(b_0, b_1, y_s[i], z_s[i], beta)) < eps) {
             x = std::get<0>(ans);
             y = std::get<1>(ans);
             break;
         }
+
+        i++;
 
     }
 
@@ -422,13 +456,23 @@ std::tuple<std::vector<ld>, std::vector<ld>> Shooting_Method(ld h, ld x_0, ld x_
     return std::make_tuple(x, y);
 }
 
-std::vector<ld> Runge_Estimate_for_Shooting(std::vector<ld> const & y, ld x_0, ld x_k, ld h) {
-    auto [x_half, y_half] = Shooting_Method(h / 2., x_0, x_k);
+
+
+
+std::vector<ld> Runge_Estimate_for_Shooting(std::vector<ld> const & y,ld h, ld x_0, ld x_1, ld a_0, ld a_1, ld alpha, ld b_0, ld b_1, ld beta) {
+
+    auto [x_half, y_half] = Shooting_Method(h / 2., x_0, x_1, a_0, a_1, alpha, b_0, b_1, beta);
     size_t n = y.size();
     std::vector<ld> phi(n);
 
     for (size_t i = 0; i != n; i ++)
-        phi[i] = Runge(y_half[i], y[i], 1);
+        phi[i] = Runge(y_half[2 * i], y[i], 1);
     
     return phi;
 }
+
+
+
+
+
+
