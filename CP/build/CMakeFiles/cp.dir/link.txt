@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -ggdb   CMakeFiles/cp.dir/src/main.cpp.o CMakeFiles/cp.dir/src/calculation.cpp.o CMakeFiles/cp.dir/src/matrix.cpp.o  -o cp 
